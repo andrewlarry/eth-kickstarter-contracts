@@ -8,6 +8,7 @@ yarn-error.log*
 # Config
 config/
 build/
+contract.txt 
 
 # Runtime data
 pids
