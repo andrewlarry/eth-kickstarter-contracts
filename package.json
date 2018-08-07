@@ -19,6 +19,7 @@
   },
   "homepage": "https://github.com/andrewlarry/ethereum-boilerplate#readme",
   "dependencies": {
+    "fs-extra": "7.0.0",
     "ganache-cli": "6.1.6",
     "mocha": "5.2.0",
     "solc": "0.4.24",
