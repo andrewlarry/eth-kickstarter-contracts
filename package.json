@@ -1,7 +1,7 @@
 {
-  "name": "ethereum-boilerplate",
+  "name": "eth-kickstarter-contracts",
   "version": "1.0.0",
-  "description": "Boilerplate for DApp development",
+  "description": "Ethereum smart contracts for decentralized kickstarter",
   "main": "index.js",
   "scripts": {
     "compile": "node compile.js",
