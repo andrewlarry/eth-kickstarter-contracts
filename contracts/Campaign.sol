@@ -57,7 +57,7 @@ contract Campaign {
     
     // Require that the sender is the manager for locking down contract methods
     modifier restricted() {
-        require(msg.sender == manager);
+        require(msg.sender == manager, "Only the contract manager can call this method");
         _;
     }
 
@@ -69,7 +69,7 @@ contract Campaign {
     
     // Add a contributor to the appovers array if enough value is sent
     function contribute() public payable {
-        require(msg.value >= minimumContribution);
+        require(msg.value >= minimumContribution, "Must send the at least the minimum value");
         approvers[msg.sender] = true;
         appoversCount++;
     }
@@ -91,12 +91,12 @@ contract Campaign {
     // Method for campaign contributor to approve a spending request
     function approveRequest(uint index) public {
         // The sender of this message is a contributor
-        require(approvers[msg.sender]);
+        require(approvers[msg.sender], "Must be a contributor to the campaign");
         
         Request storage request = requests[index];
         
         // The sender has not already voted on this request
-        require(!request.approvals[msg.sender]);
+        require(!request.approvals[msg.sender], "Cannot vote on the same request more than once");
         
         request.approvals[msg.sender] = true;
         request.approvalCount++;
@@ -107,10 +107,10 @@ contract Campaign {
         Request storage request = requests[index];
         
         // The request hasn't already been sent
-        require(!request.complete);
+        require(!request.complete, "This request has already been sent");
         
         // The number of approvers is greater than 50%
-        require(request.approvalCount > (appoversCount / 2));
+        require(request.approvalCount > (appoversCount / 2), "Need a majority vote to finalize contract");
         
         // Transfer value to recipient
         request.recipient.transfer(request.value);
