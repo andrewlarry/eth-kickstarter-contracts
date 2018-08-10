@@ -50,7 +50,7 @@ contract Campaign {
     mapping(address => bool) public approvers;
     
     // Count of all the contributors to the campaign
-    uint public appoversCount;
+    uint public approversCount;
     
     // Array of spending requests
     Request[] public requests;
@@ -64,14 +64,14 @@ contract Campaign {
     constructor(uint minimum, address creator) public {
         manager = creator;
         minimumContribution = minimum;
-        appoversCount = 0;
+        approversCount = 0;
     }
     
     // Add a contributor to the appovers array if enough value is sent
     function contribute() public payable {
         require(msg.value >= minimumContribution, "Must send the at least the minimum value");
         approvers[msg.sender] = true;
-        appoversCount++;
+        approversCount++;
     }
     
     // Method for campaign manager to create a spending request
@@ -110,11 +110,28 @@ contract Campaign {
         require(!request.complete, "This request has already been sent");
         
         // The number of approvers is greater than 50%
-        require(request.approvalCount > (appoversCount / 2), "Need a majority vote to finalize contract");
+        require(request.approvalCount > (approversCount / 2), "Need a majority vote to finalize contract");
         
         // Transfer value to recipient
         request.recipient.transfer(request.value);
         request.complete = true;
-        
+    }
+
+    // Return a summary of a campaign
+    function getSummary() public view returns(
+        uint, uint, uint, uint, address
+        ) {
+        return (
+            minimumContribution,
+            this.balance,
+            requests.length,
+            approversCount,
+            manager
+        );
+    }
+
+    // Get the request count
+    function getRequestCount() public view returns(uint) {
+        return requests.length;
     }
 }
